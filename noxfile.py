@@ -32,3 +32,12 @@ def black(session):
     args = session.posargs or locations
     session.install("black")
     session.run("black", *args)
+
+
+@nox.session(python=["3.8", "3.7"])
+def mypy(session):
+    args = session.posargs or locations
+    session.install("-e", ".")
+    session.install("-r", "requirements.txt")
+    session.install("mypy")
+    session.run("mypy", *args)

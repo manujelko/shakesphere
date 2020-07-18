@@ -14,5 +14,5 @@ def get_pokemon_species_url(pokemon_name: str) -> str:
     """
     endpoint = f"{API}{pokemon_name}"
     with requests.get(endpoint) as response:
-        url = response.json()["species"]["url"]
+        url: str = response.json()["species"]["url"]
     return url
