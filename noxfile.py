@@ -1,6 +1,6 @@
 import nox
 
-
+nox.options.sessions = "lint", "pytest"
 locations = "src", "tests", "noxfile.py"
 
 
@@ -12,7 +12,7 @@ def pytest(session):
 
 
 @nox.session(python=["3.8", "3.7"])
-def pytest_integration(session):
+def integration(session):
     session.install("-e", ".")
     session.install("-r", "requirements/dev.txt")
     session.run("pytest", "-m", "integration")
@@ -21,5 +21,12 @@ def pytest_integration(session):
 @nox.session(python=["3.8", "3.7"])
 def lint(session):
     args = session.posargs or locations
-    session.install("flake8")
+    session.install("flake8", "flake8-black")
     session.run("flake8", *args)
+
+
+@nox.session(python="3.8")
+def black(session):
+    args = session.posargs or locations
+    session.install("black")
+    session.run("black", *args)
