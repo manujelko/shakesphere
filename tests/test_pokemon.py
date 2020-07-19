@@ -1,4 +1,7 @@
+from unittest.mock import Mock
+
 import pytest
+from pytest_mock import MockFixture
 
 from shakesphere.pokemon import (
     get_descriptions,
@@ -8,7 +11,7 @@ from shakesphere.pokemon import (
 
 
 @pytest.fixture
-def mock_requests(mocker):
+def mock_requests(mocker: MockFixture) -> Mock:
     mock = mocker.patch("requests.get")
     mock.return_value.__enter__.return_value.json.return_value = {
         "species": {"url": "fake_species_url"},
@@ -20,19 +23,19 @@ def mock_requests(mocker):
     return mock
 
 
-def test_get_pokemon_species_url(mock_requests) -> None:
+def test_get_pokemon_species_url(mock_requests: Mock) -> None:
     """It gets the url from the correct key."""
     url = get_pokemon_species_url("fake_pokemon")
     assert url == "fake_species_url"
 
 
-def test_get_descriptions(mock_requests) -> None:
+def test_get_descriptions(mock_requests: Mock) -> None:
     """It gets the descriptions in english."""
     descriptions = get_descriptions("fake_url")
     assert descriptions[0] == "fake_description_en"
 
 
-def test_get_random_pokemon_description(mock_requests) -> None:
+def test_get_random_pokemon_description(mock_requests: Mock) -> None:
     """It gets a description."""
     description = get_random_pokemon_description("fake_pokemon")
     assert description == "fake_description_en"
@@ -48,7 +51,9 @@ def test_get_random_pokemon_description(mock_requests) -> None:
         pytest.param("charmander", "https://pokeapi.co/api/v2/pokemon-species/4/"),
     ],
 )
-def test_get_pokemon_species_url_integration(pokemon_name, expected_url) -> None:
+def test_get_pokemon_species_url_integration(
+    pokemon_name: str, expected_url: str
+) -> None:
     """It gets the expected urls."""
     url = get_pokemon_species_url(pokemon_name)
     assert (
@@ -67,7 +72,7 @@ def test_get_pokemon_species_url_integration(pokemon_name, expected_url) -> None
     ],
     ids=["pikachu", "bulbasaur", "squirtle", "charmander"],
 )
-def test_get_descriptions_integration(url) -> None:
+def test_get_descriptions_integration(url: str) -> None:
     """It gets a list of descriptions."""
     descriptions = get_descriptions(url)
     assert descriptions, "Expected a list of descriptions"
@@ -77,7 +82,7 @@ def test_get_descriptions_integration(url) -> None:
 @pytest.mark.parametrize(
     "pokemon_name", ["pikachu", "bulbasaur", "squirtle", "charmander"]
 )
-def test_get_random_pokemon_description_integration(pokemon_name) -> None:
+def test_get_random_pokemon_description_integration(pokemon_name: str) -> None:
     """It gets a description."""
     description = get_random_pokemon_description(pokemon_name)
     assert description, "Expected a pokemon description"
