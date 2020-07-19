@@ -17,6 +17,7 @@ def mock_requests(mocker):
             {"flavor_text": "fake_description_it", "language": {"name": "it"}},
         ],
     }
+    return mock
 
 
 def test_get_pokemon_species_url(mock_requests) -> None:
