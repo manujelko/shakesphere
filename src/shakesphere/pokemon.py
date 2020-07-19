@@ -1,8 +1,21 @@
+import random
 from typing import List
 
 import requests
 
 API = "https://pokeapi.co/api/v2/pokemon/"
+
+
+def get_random_pokemon_description(pokemon_name: str) -> str:
+    """Retrieve one of the available descriptions for the given pokemon.
+
+    Args:
+        pokemon_name: pokemon of interest.
+
+    Returns:
+        pokemon description.
+    """
+    return random.choice(get_descriptions(get_pokemon_species_url(pokemon_name)))
 
 
 def get_pokemon_species_url(pokemon_name: str) -> str:
@@ -21,6 +34,14 @@ def get_pokemon_species_url(pokemon_name: str) -> str:
 
 
 def get_descriptions(url: str) -> List[str]:
+    """Retrieve available (english) descriptions from the given url.
+
+    Args:
+        url: url containing the pokemon descriptions.
+
+    Returns:
+        list of available pokemon descriptions.
+    """
     with requests.get(url) as response:
         all_descriptions = response.json()["flavor_text_entries"]
         uniq_en_descriptions = [

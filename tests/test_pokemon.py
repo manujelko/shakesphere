@@ -1,37 +1,37 @@
 import pytest
 
-from shakesphere.pokemon import get_descriptions, get_pokemon_species_url
+from shakesphere.pokemon import (
+    get_descriptions,
+    get_pokemon_species_url,
+    get_random_pokemon_description,
+)
 
 
 @pytest.fixture
-def mock_species_url(mocker):
+def mock_requests(mocker):
     mock = mocker.patch("requests.get")
     mock.return_value.__enter__.return_value.json.return_value = {
-        "species": {"url": "Totally fake url"},
-    }
-    return mock
-
-
-@pytest.fixture
-def mock_descriptions(mocker):
-    mock = mocker.patch("requests.get")
-    mock.return_value.__enter__.return_value.json.return_value = {
+        "species": {"url": "fake_species_url"},
         "flavor_text_entries": [
-            {"flavor_text": "fake description english", "language": {"name": "en"}},
-            {"flavor_text": " fake description italian", "language": {"name": "it"}},
-        ]
+            {"flavor_text": "fake_description_en", "language": {"name": "en"}},
+            {"flavor_text": "fake_description_it", "language": {"name": "it"}},
+        ],
     }
-    return mock
 
 
-def test_get_pokemon_species_url(mock_species_url) -> None:
-    url = get_pokemon_species_url("fake pokemon")
-    assert url == "Totally fake url"
+def test_get_pokemon_species_url(mock_requests) -> None:
+    url = get_pokemon_species_url("fake_pokemon")
+    assert url == "fake_species_url"
 
 
-def test_get_descriptions(mock_descriptions) -> None:
-    descriptions = get_descriptions("fake url")
-    assert descriptions[0] == "fake description english"
+def test_get_descriptions(mock_requests) -> None:
+    descriptions = get_descriptions("fake_url")
+    assert descriptions[0] == "fake_description_en"
+
+
+def test_get_random_pokemon_description(mock_requests) -> None:
+    description = get_random_pokemon_description("fake_pokemon")
+    assert description == "fake_description_en"
 
 
 @pytest.mark.integration
@@ -55,13 +55,22 @@ def test_get_pokemon_species_url_integration(pokemon_name, expected_url) -> None
 @pytest.mark.parametrize(
     "url",
     [
-        pytest.param("https://pokeapi.co/api/v2/pokemon-species/25/"),
-        pytest.param("https://pokeapi.co/api/v2/pokemon-species/1/"),
-        pytest.param("https://pokeapi.co/api/v2/pokemon-species/7/"),
-        pytest.param("https://pokeapi.co/api/v2/pokemon-species/4/"),
+        "https://pokeapi.co/api/v2/pokemon-species/25/",
+        "https://pokeapi.co/api/v2/pokemon-species/1/",
+        "https://pokeapi.co/api/v2/pokemon-species/7/",
+        "https://pokeapi.co/api/v2/pokemon-species/4/",
     ],
     ids=["pikachu", "bulbasaur", "squirtle", "charmander"],
 )
-def test_get_descriptions_integration(url):
+def test_get_descriptions_integration(url) -> None:
     descriptions = get_descriptions(url)
-    assert descriptions, f"Expected a list of descriptions, got {descriptions}"
+    assert descriptions, "Expected a list of descriptions"
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize(
+    "pokemon_name", ["pikachu", "bulbasaur", "squirtle", "charmander"]
+)
+def test_get_random_pokemon_description_integration(pokemon_name) -> None:
+    description = get_random_pokemon_description(pokemon_name)
+    assert description, "Expected a pokemon description"
