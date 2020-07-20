@@ -14,6 +14,10 @@ setup(
     url="https://packaging.python.org/tutorials/packaging-projects/",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
+    install_requires=[
+        "bottle",
+        "requests",
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
