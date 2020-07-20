@@ -12,6 +12,16 @@ def test_poke_translation(mock_get: Mock, mock_post: Mock) -> None:
     assert result == {"name": "fake_pokemon", "description": "fake_translated_text"}
 
 
+def test_poke_translation_fail_get(mock_get_fail: Mock) -> None:
+    result = poke_translation("fake_pokemon")
+    assert result["error"] == "400 Client Error: fake_reason for url: fake_url"
+
+
+def test_poke_translation_fail_post(mock_get, mock_post_fail: Mock) -> None:
+    result = poke_translation("fake_pokemon")
+    assert result["error"] == "400 Client Error: fake_reason for url: fake_url"
+
+
 @pytest.mark.e2e
 def test_app() -> None:
     app = TestApp(myapp)

@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 from pytest_mock import MockFixture
+from requests import Response
 
 
 def pytest_configure(config):
@@ -19,6 +20,28 @@ def mock_get(mocker: MockFixture) -> Mock:
             {"flavor_text": "fake_description_it", "language": {"name": "it"}},
         ],
     }
+    return mock
+
+
+@pytest.fixture
+def mock_get_fail(mocker: MockFixture) -> Mock:
+    mock = mocker.patch("requests.get")
+    response = Response()
+    response.status_code = 400
+    response.url = "fake_url"
+    response.reason = "fake_reason"
+    mock.return_value.__enter__.return_value = response
+    return mock
+
+
+@pytest.fixture
+def mock_post_fail(mocker: MockFixture) -> Mock:
+    mock = mocker.patch("requests.post")
+    response = Response()
+    response.status_code = 400
+    response.url = "fake_url"
+    response.reason = "fake_reason"
+    mock.return_value.__enter__.return_value = response
     return mock
 
 

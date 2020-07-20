@@ -29,6 +29,7 @@ def get_pokemon_species_url(pokemon_name: str) -> str:
     """
     endpoint = f"{API}{pokemon_name}"
     with requests.get(endpoint) as response:
+        response.raise_for_status()
         url: str = response.json()["species"]["url"]
     return url
 
@@ -43,6 +44,7 @@ def get_descriptions(url: str) -> List[str]:
         list of available pokemon descriptions.
     """
     with requests.get(url) as response:
+        response.raise_for_status()
         all_descriptions = response.json()["flavor_text_entries"]
         uniq_en_descriptions = [
             description["flavor_text"]
