@@ -10,8 +10,8 @@ def pytest(session: Session) -> None:
     """Run unit tests and ensure coverage is 100 %."""
     session.install("-e", ".")
     session.install("-r", "requirements.txt")
-    session.install("pytest", "pytest-mock", "pytest-cov")
-    session.run("pytest", "--cov", "-m", "not integration")
+    session.install("pytest", "pytest-mock", "pytest-cov", "webtest")
+    session.run("pytest", "--cov", "-m", "not integration and not e2e")
 
 
 @nox.session(python=["3.8", "3.7"])
@@ -19,8 +19,17 @@ def integration(session: Session) -> None:
     """Run integration tests."""
     session.install("-e", ".")
     session.install("-r", "requirements.txt")
-    session.install("pytest")
+    session.install("pytest", "pytest_mock", "webtest")
     session.run("pytest", "-m", "integration")
+
+
+@nox.session(python=["3.8", "3.7"])
+def e2e(session: Session) -> None:
+    """Run end-to-end tests."""
+    session.install("-e", ".")
+    session.install("-r", "requirements.txt")
+    session.install("pytest", "pytest_mock", "webtest")
+    session.run("pytest", "-m", "e2e")
 
 
 @nox.session(python=["3.8", "3.7"])

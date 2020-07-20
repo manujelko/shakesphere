@@ -1,6 +1,7 @@
 [run]
 branch = True
 source = src/
+omit = src/shakesphere/__main__.py
 
 [report]
 fail_under = 100

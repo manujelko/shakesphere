@@ -1,21 +1,11 @@
 from unittest.mock import Mock
 
 import pytest
-from pytest_mock import MockFixture
 
 from shakesphere.shakespeare import translate
 
 
-@pytest.fixture
-def mock_requests(mocker: MockFixture) -> Mock:
-    mock = mocker.patch("requests.post")
-    mock.return_value.__enter__.return_value.json.return_value = {
-        "contents": {"translated": "fake_translated_text"},
-    }
-    return mock
-
-
-def test_translate(mock_requests: Mock) -> None:
+def test_translate(mock_post: Mock) -> None:
     """It gets translated test from the correct keys."""
     translation = translate("fake_text")
     assert translation == "fake_translated_text"

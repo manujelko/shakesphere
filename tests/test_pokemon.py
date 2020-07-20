@@ -1,7 +1,6 @@
 from unittest.mock import Mock
 
 import pytest
-from pytest_mock import MockFixture
 
 from shakesphere.pokemon import (
     get_descriptions,
@@ -10,32 +9,19 @@ from shakesphere.pokemon import (
 )
 
 
-@pytest.fixture
-def mock_requests(mocker: MockFixture) -> Mock:
-    mock = mocker.patch("requests.get")
-    mock.return_value.__enter__.return_value.json.return_value = {
-        "species": {"url": "fake_species_url"},
-        "flavor_text_entries": [
-            {"flavor_text": "fake_description_en", "language": {"name": "en"}},
-            {"flavor_text": "fake_description_it", "language": {"name": "it"}},
-        ],
-    }
-    return mock
-
-
-def test_get_pokemon_species_url(mock_requests: Mock) -> None:
+def test_get_pokemon_species_url(mock_get: Mock) -> None:
     """It gets the url from the correct key."""
     url = get_pokemon_species_url("fake_pokemon")
     assert url == "fake_species_url"
 
 
-def test_get_descriptions(mock_requests: Mock) -> None:
+def test_get_descriptions(mock_get: Mock) -> None:
     """It gets the descriptions in english."""
     descriptions = get_descriptions("fake_url")
     assert descriptions[0] == "fake_description_en"
 
 
-def test_get_random_pokemon_description(mock_requests: Mock) -> None:
+def test_get_random_pokemon_description(mock_get: Mock) -> None:
     """It gets a description."""
     description = get_random_pokemon_description("fake_pokemon")
     assert description == "fake_description_en"
