@@ -4,6 +4,12 @@ with open("README.md", "r") as stream:
     long_description = stream.read()
 
 
+def read_requirements(file):
+    with open(file, "r") as stream:
+        content = stream.read()
+    return content.split("\n")
+
+
 setup(
     name="shakesphere",
     version="0.1.0",
@@ -14,10 +20,7 @@ setup(
     url="https://packaging.python.org/tutorials/packaging-projects/",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
-    install_requires=[
-        "bottle",
-        "requests",
-    ],
+    install_requires=read_requirements("requirements.txt"),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
