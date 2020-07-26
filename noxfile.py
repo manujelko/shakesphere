@@ -5,7 +5,7 @@ nox.options.sessions = "lint", "mypy", "pytest"
 locations = "src", "tests", "noxfile.py"
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8", "3.7", "3.6"])
 def pytest(session: Session) -> None:
     """Run unit tests and ensure coverage is 100 %."""
     session.install("-e", ".")
@@ -14,7 +14,7 @@ def pytest(session: Session) -> None:
     session.run("pytest", "--cov", "-m", "not integration and not e2e")
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8", "3.7", "3.6"])
 def integration(session: Session) -> None:
     """Run integration tests."""
     session.install("-e", ".")
@@ -23,7 +23,7 @@ def integration(session: Session) -> None:
     session.run("pytest", "-m", "integration")
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8", "3.7", "3.6"])
 def e2e(session: Session) -> None:
     """Run end-to-end tests."""
     session.install("-e", ".")
@@ -32,7 +32,7 @@ def e2e(session: Session) -> None:
     session.run("pytest", "-m", "e2e")
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8", "3.7", "3.6"])
 def lint(session: Session) -> None:
     """Lint with flake8."""
     args = session.posargs or locations
@@ -48,7 +48,7 @@ def black(session: Session) -> None:
     session.run("black", *args)
 
 
-@nox.session(python=["3.8", "3.7"])
+@nox.session(python=["3.8", "3.7", "3.6"])
 def mypy(session: Session) -> None:
     """Run static type-checking with mypy."""
     args = session.posargs or locations
