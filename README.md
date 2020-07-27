@@ -22,8 +22,8 @@
 
     ```shell script
    python -m venv venv
-   source venv/bin/activate      # MaxOS/Linux
-   source venv/Scripts/activate  # Windows
+   source venv/bin/activate  # MaxOS/Linux
+   venv/Scripts/activate     # Windows
     ```
 
 4. Install
