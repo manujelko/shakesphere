@@ -11,7 +11,7 @@
 #### Locally
 
 
-1. Satisfy installation requirements (python3.7 or later).
+1. Satisfy installation requirements (python3.6 or later).
    Visit https://www.python.org/ for detials.
 
 2. Clone the repository
