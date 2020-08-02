@@ -22,7 +22,7 @@
 
     ```shell script
    python -m venv venv
-   source venv/bin/activate  # MaxOS/Linux
+   source venv/bin/activate  # MacOS/Linux
    venv/Scripts/activate     # Windows
     ```
 
